@@ -86,7 +86,6 @@ class MainController extends Controller
             'name'         => $request->input('name'),
             'email'        => $request->input('email'),
             'password'     => Hash::make($request->input('password')),
-
         ]);
         return redirect('/main')->with('message','Successfully Registered and now you can login!');
         //return view('login')->with('message','You have successfully registered and now you can login!');
@@ -167,8 +166,28 @@ class MainController extends Controller
           return redirect()->back()->with('message',"You have changed your password successfully!");
     }
 
+    public function verificationpage()
+    {
+        return view('verificationpage');
+    }
 
-    
+    public function verifyuser(Request $request)
+    {
+        $request->validate([
+        'verification_code' => 'alphanum|required',
+    ]);
+        return view('index');
+    }
 }
+        /*$user = Auth::user();
 
- 
+        if($request->verification_code == $user->verification_code)
+        {
+
+            return view('index');
+        }
+        else{
+            return redirect()->back()
+            ->with('error','The two factor code you have entered does not match');
+        }
+    */

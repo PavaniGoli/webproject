@@ -30,7 +30,8 @@ Route::get('/forgotpassword','App\Http\Controllers\MainController@forgotpassword
 Route::post('main/forgot_password','App\Http\Controllers\MainController@forgot_password');
 Route::get('/setnewpassword/{email}','App\Http\Controllers\MainController@setnewpassword');
 Route::post('main/set_password','App\Http\Controllers\MainController@set_password');
-
+Route::get('/verificationpage','App\Http\Controllers\MainController@verificationpage');
+Route::get('/verifyuser','App\Http\Controllers\MainController@verifyuser');
 //function (){
    // return view('register');
 //});

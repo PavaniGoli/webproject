@@ -4,7 +4,7 @@ Hello {{$email_data['name']}}!!
 <br>
 Please enter the below verification code and activate your account!
 <br><br>
-{{$email_data['verification_code']}}
-
+<b>{{$email_data['verification_code']}}</b>
+<a href="{{ url('/verificationpage') }}">Click Here!</a>
 <br><br>
 Thank you!!
