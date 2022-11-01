@@ -29,6 +29,6 @@ class VerificationEmail extends Mailable
      */
     public function build()
     {
-        return $this->from(env('MAIL_USERNAME'),'Digital Library')->subject('Welcome!')->view('mail.verificationemail',['email_data'=>$this->email_data]);
+        return $this->from(env('MAIL_USERNAME'),'Digital Library')->subject('Two Factor Code')->view('mail.verificationemail',['email_data'=>$this->email_data]);
     }
 }

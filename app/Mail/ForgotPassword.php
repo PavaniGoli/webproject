@@ -29,6 +29,6 @@ class ForgotPassword extends Mailable
      */
     public function build()
     {
-        return $this->from(env('MAIL_USERNAME'),'Digital Library')->subject('Welcome!')->view('mail.forgotpassword',['email_data'=>$this->email_data]);
+        return $this->from(env('MAIL_USERNAME'),'Digital Library')->subject('Forgot Password')->view('mail.forgotpassword',['email_data'=>$this->email_data]);
     }
 }

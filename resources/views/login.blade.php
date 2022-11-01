@@ -18,10 +18,6 @@
   <div class="container box">
    <h3 align="center">Login here</h3><br/>
 
-   @if(isset(Auth::user()->email))
-    <script>window.location="/main/successlogin";</script>
-   @endif
-
    @if ($message = Session::get('error'))
    <div class="alert alert-danger alert-block">
     <button type="button" class="close" data-dismiss="alert">×</button>

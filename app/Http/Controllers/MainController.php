@@ -20,37 +20,38 @@ class MainController extends Controller
     function checklogin(Request $request)
     {
         $this->validate($request, [
-            'email'     =>  'required|email',
-            'password'  =>  'required|alphaNum|min:6'
-        ]);
-
-        $user_data = array(
+            'email'   => 'required|email',
+            'password'=> 'required|alphaNum|min:6'
+           ]);
+      
+           $user_data = array(
             'email'  => $request->get('email'),
             'password' => $request->get('password')
            );
            
-    /*if(Auth::attempt($user_data)){
-        return redirect('index')->with('message','You have to enter the veriification code here to login');
-     }*/
-     if (DB::table('users')->where('email', $request->email)->exists()) {
-        $userInfo = Auth::user();
-        $userInfo = DB::table('users')->where('email', $request->email)->first();
-     }
-     if($userInfo != null)
-     {
-         MailController::VerificationEmail($userInfo->name,$userInfo->email,$userInfo->verification_code);
-         return redirect()->back()->with('message','Please Check your email for the verification code!');
-     }
-         
-     return redirect()->back()->with('error_message','Please enter a valid email');
-   
-     /*else
-     {
-      return back()->with('error', 'Wrong Login Details');
-     }*/
+            if(Auth::attempt($user_data))
+            {
+            
+            if (DB::table('users')->where('email', $request->email)->exists()) {
+                $userInfo = Auth::user();
+                $userInfo = DB::table('users')->where('email', $request->email)->first();
+            }
 
+            if($userInfo != null) {
+                $userInfo = Auth::user();
+                $result= MailController::VerificationEmail($userInfo->name,$userInfo->email,$userInfo->verification_code);
+                $userInfo->verification_code = $result;
+                $userInfo->save();
+                return redirect()->back()->with('message','Please Check your email for the verification code!');        
+           
+            }
+        }
+           else
+           {
+            return back()->with('error', 'Wrong Login Details');
+           }
+      
     }
-    
 
     function successlogin()
     {
@@ -59,6 +60,9 @@ class MainController extends Controller
     
     function logout()
     {
+        $user = Auth::user();
+        $user->is_verfied = 0;
+        $user->save();
         Auth::logout();
         return redirect('main');
     }
@@ -173,21 +177,20 @@ class MainController extends Controller
 
     public function verifyuser(Request $request)
     {
-        $request->validate([
-        'verification_code' => 'alphanum|required',
-    ]);
-        return view('index');
-    }
-}
-        /*$user = Auth::user();
-
-        if($request->verification_code == $user->verification_code)
-        {
-
+         
+        $token = $_GET['verification_code'];
+        $user = Auth::user();
+        
+        if($token == $user->verification_code)
+        {        
+            $user->is_verfied = 1;
+            $user->save();
             return view('index');
         }
         else{
-            return redirect()->back()
-            ->with('error','The two factor code you have entered does not match');
+            return redirect()->back()->with('error','The two factor code you have entered does not match');
         }
-    */
+    }
+}
+        
+    

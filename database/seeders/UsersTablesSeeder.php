@@ -19,6 +19,7 @@ class UsersTablesSeeder extends Seeder
      */
     public function run()
     {
+        $usermail = Auth::users()->email;
         User::create([
             'name'              => 'Pavani',
             'email'             => 'g.siripavani@gmail.com',

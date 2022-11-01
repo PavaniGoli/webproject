@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerificationEmail;
 use App\Mail\ForgotPassword;
+use Illuminate\Support\Str;
 
 class MailController extends Controller
 {
@@ -24,9 +25,12 @@ class MailController extends Controller
         $data =[
             'name'=>$name,
             'email'=>$email,
-            'verification_code'=>$verification_code
+            'verification_code'=> Str::random(10),
         ];
-         Mail::to($email)->send(new VerificationEmail($data));
+
+        Mail::to($email)->send(new VerificationEmail($data));
+        return $data['verification_code'];
     }
+
     
 }

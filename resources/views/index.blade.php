@@ -58,8 +58,8 @@
   <div class="container box">
    <h3 align="center">Hello There!</h3><br />
    <a href="\update" class="button" style="float: right">Profile</a>
-   @if(isset(Auth::user()->email))
-    <div class="alert alert-danger success-block">
+   @if(Auth::user()->is_verfied !=0)
+   <div class="alert alert-danger success-block">
      <strong>Welcome {{ Auth::user()->name }}</strong>
      <br />
      <a href="{{ url('/main/logout') }}">Logout</a>

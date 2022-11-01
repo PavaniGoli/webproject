@@ -18,9 +18,9 @@
   <div class="container box">
    <h3 align="center">Login here</h3><br/>
 
-   @if(isset(Auth::user()->email))
-    <script>window.location="/main/successlogin";</script>
-   @endif
+   <!--@if(isset(Auth::user()->verification_code))
+    <script>window.location="/index";</script>
+   @endif-->
 
    @if ($message = Session::get('error'))
    <div class="alert alert-danger alert-block">
@@ -49,7 +49,7 @@
    <form method="get" action="{{ url('/verifyuser') }}">
    @csrf
     <div class="form-group">
-     <label>Enter Verification Code</label>
+     <label>Enter Verification Code Here! </label>
      <input type="text" name="verification_code" class="form-control" />
     </div>
     <div class="form-group">
