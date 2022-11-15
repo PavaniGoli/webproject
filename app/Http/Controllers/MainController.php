@@ -340,6 +340,7 @@ class MainController extends Controller
         $university            = $request->input('university');
         $year                  = $request->input('year');
         $pdf                   = rand(500,1500).".pdf";
+        $etd_file_id           = rand(500,1500);
         $abstract              = $request->input('abstract');
         $advisor               = $request->input('advisor');
 
@@ -347,6 +348,7 @@ class MainController extends Controller
             'index' => 'metadata',
             'type' => '_doc',
             'body'  => [
+                    'etd_file_id'=>$etd_file_id,
                     'title' => $title,
                     'author' => $author,
                     'degree' => $degree,
@@ -356,13 +358,18 @@ class MainController extends Controller
                     'pdf'=> $pdf,
                     'abstract'=> $abstract,
                     'advisor'=> $advisor
+                    
             ]
         ];
         
         $response = $client->index($params);
-        echo "<h3>We have successfully indexed these.</h3>";
-        print_r($params);
-        echo "<h3><Response/h3>";
+        $pdf_id = trim($pdf,".pdf");
+
+        echo'
+        <div class="alert">
+        <h3>We have successfully indexed your data!</h3>
+        <h3>We have generated a PDF id : '.$pdf_id.'  , please upload your PDF with '.$pdf.' name</h3>
+        </div>';
     }
 
     // public function upload_file(Request $request)
