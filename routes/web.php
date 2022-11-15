@@ -45,9 +45,13 @@ Route::get('/loginsummary','App\Http\Controllers\MainController@loginsummary');
 Route::get('/insert','App\Http\Controllers\MainController@insert');
 Route::post('/add_data','App\Http\Controllers\MainController@add_data');
 
+// Route::get('fileUpload', function () 
+// {
+//     return view('fileUpload');
+// })->name('fileUpload');
+Route::get('/upload-file','App\Http\Controllers\FileUpload@createForm');
+Route::post('/upload-file','App\Http\Controllers\FileUpload@fileUpload')->name('fileUpload');
 
-Route::get('/upload-file', [FileUpload::class, 'createForm']);
-Route::post('/upload-file', [FileUpload::class, 'fileUpload'])->name('fileUpload');
 
 
 
