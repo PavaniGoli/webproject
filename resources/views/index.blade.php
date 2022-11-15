@@ -1,64 +1,95 @@
 <!DOCTYPE html>
-<html>
- <head>
-  <title>Login System</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <style type="text/css">
-   .box{ 
-    width:600px;
-    margin:0 auto;
-    border:1px solid #ccc;
+  <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.css"/>
+  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+mark{
+background: yellow;
+color: black;
+}
+.box{
+    width:1200px;
+    margin-top:10%;
+    
    }
-   .button {
-    background-color: #4287f5;
-    border: none;
-    color: white;
-    padding: 10px 25px;
-    text-align: right;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+.btn-primary {
+    color: black;
+    background-color: #e8e6e6;
+    border-color: #999;
+}
+.btn-link {
+    color: black;
+    background-color: #e8e6e6;
+    border-color: #999;
+}
+   body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color:black;
+    background-color: white;
     }
-    form.example input[type=text] {
-      padding: 10px;
-      font-size: 17px;
-      border: 1px solid grey;
-      float: left;
-      width: 80%;
-      background: #f1f1f1;
+    .head{
+    font-family: 'Akaya Telivigala', cursive;
+    font-size:50px;
+    text-align:center;
     }
-    form.example button {
-    float: left;
-    width: 20%;
-    padding: 10px;
-    background: #2196F3;
-    color: white;
-    font-size: 17px;
-    border: 1px solid grey;
-    border-left: none;
-    cursor: pointer;
+    .heading{
+    font-family: 'Akaya Telivigala', cursive;
+    font-size:100px;
+    text-align:center;
+    }
+    ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #dddddd;
   }
-  form.example button:hover {
-  background: #0b7dda;
+  li {
+    float: right;
   }
-  form.example::after {
-  content: "";
-  clear: both;
-  display: table;
+  li a {
+    color: black;
+    display: block;
+    padding: 8px;
   }
  </style>
  </head>
  <body>
-</br>
+
+
+  <ul>
+  <li><a href="\insert"><b>Insert Entry</b></a></li>
+  <li><a href="\update"><b>Profile</b></a></li>
+   @if(Auth::user()->is_verified !=0)
+   <!--<div class="alert alert-danger success-block">-->
+     
+    
+  <li><a href="{{ url('/main/logout') }}"><b>Logout</b></a></li>
+  
+   @else
+    <script>window.location = "/main";</script>
+  @endif
+  </ul>
+  <br>
+  <h3 align="center" class= heading >Welcome {{ Auth::user()->name }}!</h3><br/>
+  <!--<h3 align="center">Hello There!</h3><br />
+  </br>
   <div class="container box">
    <h3 align="center">Hello There!</h3><br />
    <a href="\update" class="button" style="float: right">Profile</a>
-   @if(Auth::user()->is_verfied !=0)
+   @if(Auth::user()->is_verified !=0)
    <div class="alert alert-danger success-block">
      <strong>Welcome {{ Auth::user()->name }}</strong>
      <br />
@@ -66,15 +97,22 @@
     </div>
    @else
     <script>window.location = "/main";</script>
-   @endif  
-   </div>
-   </div>
+   @endif   -->
+   
+   
+   <form action="/loginserp" method="POST" role="search">
+    {{ csrf_field() }}
+    <div class="input-group" style="margin:20px;">
+        <input type="text" class="form-control" name="q"
+            placeholder="Search"> <span class="input-group-btn">
+            <div class="form-group" style="margin-left:2px;">
+                <input type="submit" name="Submit" class="btn btn-primary" value="Submit" style="font-weight:bold" /> 
+                </form> 
+                </div> 
+    </div>
+</div>
 </br>
-<form class="example" action="/action_page.php" style="margin:auto;max-width:300px">
-  <input type="text" placeholder="Search.." name="search2">
-  <button type="submit"><i class="fa fa-search"></i></button>
-</form>
+  
 </br>
-  </div>
  </body>
 </html>

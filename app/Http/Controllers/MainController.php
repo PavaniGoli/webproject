@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use Validator;
 use Auth;
-
+use Elastic\Elasticsearch;
+use Elastic\Elasticsearch\ClientBuilder;
 class MainController extends Controller
 {
     function main()
@@ -61,7 +62,7 @@ class MainController extends Controller
     function logout()
     {
         $user = Auth::user();
-        $user->is_verfied = 0;
+        $user->is_verified = 0;
         $user->save();
         Auth::logout();
         return redirect('main');
@@ -180,10 +181,9 @@ class MainController extends Controller
          
         $token = $_GET['verification_code'];
         $user = Auth::user();
-        
         if($token == $user->verification_code)
         {        
-            $user->is_verfied = 1;
+            $user->is_verified = 1;
             $user->save();
             return view('index');
         }
@@ -191,6 +191,203 @@ class MainController extends Controller
             return redirect()->back()->with('error','The two factor code you have entered does not match');
         }
     }
-}
+    public function searchpage()
+    {
+        return view('serp');
+    }
+    public function seepage()
+    {
+        return view('see');
+    }
+
+    public function searchword(Request $request)
+    {   
+        $query_string = $request->get("q");
+        $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
+          if ($query_string != "") {
+              $searchParams = [
+                'index' => 'metadata',
+                'from' => 0,
+                'size' => 501,
+                'type' => '_doc',
+                'body' => [
+                    'query' => [
+                        'multi_match' => [
+                            'query' => $q,
+                            'fields' => ['$etd_file_id','author','$year','university','degree','program','abstract','title','advisor','wiki_terms']
+
+            ]
+                        ]
+                ]
+                        ];
+
+        return view('serp', ["query_string"=>$query_string])->withquery($searchParams);      
+    }
+    }
+
+    public function download(Request $request){
+        $pdf = $request->get("q");
+        $path = "/Users/pavani/web/storage/app/public/PDF";
+      
+        $dir =scandir($path);
+        foreach($dir as $file){
+          $fname=$path;
+        }
+        if(mime_content_type($fname)=='application/pdf')
+        {
+            $name="/Users/pavani/web/PDF/".$pdf."/".$file;
+            return response() -> download($name);
+        //   fopen($name, "r") or die("Unable to open file!");
+        //   echo fread($name);
+        //   fclose($name);
         
+        }
+    }
+
+    public function loginsearch(Request $request)
+    {
+
+        $query_string = $request->get("q");
+        $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
+        if ($query_string != "") {
+            $searchParams = [
+                'index' => 'metadata',
+                'from' => 0,
+                'size' => 501,
+                'type' => '_doc',
+                'body' => [
+                    'query' => [
+                        'multi_match' => [
+                            'query' => $q,
+                            'fields' => ['$etd_file_id','author','$year','university','degree','program','abstract','title','advisor','wiki_terms']
+
+            ]
+                        ]
+                ]
+                        ];
+
+        return view('loginserp', ["query_string"=>$query_string])->withquery($searchParams);  
+                    }
+    }
     
+    public function summary(Request $request)
+    {
+        $query_string = $request->get("q");
+        $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
+      
+          if ($query_string != "") {
+            $params = [
+                'index' => 'metadata',
+                'from' => 0,
+                'size' => 501,
+                'type' => '_doc',
+                'body' => [
+                    'query' => [
+                        'multi_match' => [
+                            'query' => $q,
+                            'fields' => ['pdf']
+          
+                            ]
+                        ]
+                    ]
+                ];
+          
+        return view('summary',["query_string"=>$query_string])->withquery($params);
+    }
+    }
+
+    public function loginsummary(Request $request)
+    {
+        $query_string = $request->get("q");
+        $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
+      
+          if ($query_string != "") {
+            $params = [
+                'index' => 'metadata',
+                'from' => 0,
+                'size' => 501,
+                'type' => '_doc',
+                'body' => [
+                    'query' => [
+                        'multi_match' => [
+                            'query' => $q,
+                            'fields' => ['pdf']
+          
+                            ]
+                        ]
+                    ]
+                ];
+          
+        return view('loginsummary',["query_string"=>$query_string])->withquery($params);
+    }
+    }
+
+    public function insert(Request $request)
+    {
+        
+        return view('insert');
+            
+    }
+
+    public function add_data(Request $request)
+    {
+        $client = ClientBuilder::create()->setHosts(['localhost:9200'])->build();
+        
+        $title                 = $request->input("title");
+        $author                = $request->input('author');
+        $degree                = $request->input('degree');
+        $program               = $request->input('program');
+        $university            = $request->input('university');
+        $year                  = $request->input('year');
+        $pdf                   = rand(500,1500).".pdf";
+        $abstract              = $request->input('abstract');
+        $advisor               = $request->input('advisor');
+
+        $params = [
+            'index' => 'metadata',
+            'type' => '_doc',
+            'body'  => [
+                    'title' => $title,
+                    'author' => $author,
+                    'degree' => $degree,
+                    'program' => $program,
+                    'university' => $university,
+                    'year'=> $year,
+                    'pdf'=> $pdf,
+                    'abstract'=> $abstract,
+                    'advisor'=> $advisor
+            ]
+        ];
+        
+        $response = $client->index($params);
+        echo "<h3>We have successfully indexed these.</h3>";
+        print_r($params);
+        echo "<h3><Response/h3>";
+    }
+
+    // public function upload_file(Request $request)
+    // {
+    //     $targetfolder = "/Users/pavani/web/storage/PDF";
+
+    //     $targetfolder = $targetfolder . basename( $_FILES['file']['name']) ;
+
+    //     if(move_uploaded_file($_FILES['file']['tmp_name'], $targetfolder))
+
+    //     {
+
+    //         echo "The file ". basename( $_FILES['file']['name']). " is uploaded";
+
+    //     }
+
+    //     else {
+
+    //         echo "Problem uploading file";
+
+    //     }
+
+    // }
+}
+
+
+
+
