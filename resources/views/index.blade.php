@@ -64,6 +64,9 @@ color: black;
     display: block;
     padding: 8px;
   }
+  .containerbox{
+    margin: 0 auto;
+  }
  </style>
  </head>
  <body>
@@ -72,34 +75,14 @@ color: black;
   <ul>
   <li><a href="\insert"><b>Insert Entry</b></a></li>
   <li><a href="\update"><b>Profile</b></a></li>
-   @if(Auth::user()->is_verified !=0)
-   <!--<div class="alert alert-danger success-block">-->
-     
-    
-  <li><a href="{{ url('/main/logout') }}"><b>Logout</b></a></li>
-  
-   @else
+   @if(Auth::user()->is_verified !=0)  
+    <li><a href="{{ url('/main/logout') }}"><b>Logout</b></a></li>
+    @else
     <script>window.location = "/main";</script>
-  @endif
+   @endif
   </ul>
   <br>
-  <h3 align="center" class= heading >Welcome {{ Auth::user()->name }}!</h3><br/>
-  <!--<h3 align="center">Hello There!</h3><br />
-  </br>
-  <div class="container box">
-   <h3 align="center">Hello There!</h3><br />
-   <a href="\update" class="button" style="float: right">Profile</a>
-   @if(Auth::user()->is_verified !=0)
-   <div class="alert alert-danger success-block">
-     <strong>Welcome {{ Auth::user()->name }}</strong>
-     <br />
-     <a href="{{ url('/main/logout') }}">Logout</a>
-    </div>
-   @else
-    <script>window.location = "/main";</script>
-   @endif   -->
-   
-   
+  <h3 align="center" class= heading >Welcome {{ Auth::user()->name }}!</h3><br/>   
    <form action="/loginserp" method="POST" role="search">
     {{ csrf_field() }}
     <div class="input-group" style="margin:20px;">
@@ -107,12 +90,12 @@ color: black;
             placeholder="Search"> <span class="input-group-btn">
             <div class="form-group" style="margin-left:2px;">
                 <input type="submit" name="Submit" class="btn btn-primary" value="Submit" style="font-weight:bold" /> 
-                </form> 
-                </div> 
+          </form> 
+      </div> 
     </div>
 </div>
 </br>
-  
-</br>
+</br><br><br><br><br><br><br><br><br><br><br><br><br>
+@include('footer')
  </body>
 </html>

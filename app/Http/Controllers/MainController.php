@@ -11,6 +11,8 @@ use Validator;
 use Auth;
 use Elastic\Elasticsearch;
 use Elastic\Elasticsearch\ClientBuilder;
+use App\Rules\ReCaptcha;
+
 class MainController extends Controller
 {
     function main()
@@ -22,7 +24,8 @@ class MainController extends Controller
     {
         $this->validate($request, [
             'email'   => 'required|email',
-            'password'=> 'required|alphaNum|min:6'
+            'password'=> 'required|alphaNum|min:6',
+            'g-recaptcha-response'=> ['required', new ReCaptcha]
            ]);
       
            $user_data = array(
@@ -85,7 +88,7 @@ class MainController extends Controller
             'name'             => 'required',
             'email'            => 'required|email',
             'password'         => 'min:6|alphaNum|required_with:confirm_password',
-            'confirm_password' => 'min:6|same:password'
+            'confirm_password' => 'min:6|same:password',
         ]);
         $user = User::create([
             'name'         => $request->input('name'),
@@ -206,7 +209,7 @@ class MainController extends Controller
         $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
           if ($query_string != "") {
               $searchParams = [
-                'index' => 'metadata',
+                'index' => 'metadata2',
                 'from' => 0,
                 'size' => 501,
                 'type' => '_doc',
@@ -237,10 +240,6 @@ class MainController extends Controller
         {
             $name="/Users/pavani/web/PDF/".$pdf."/".$file;
             return response() -> download($name);
-        //   fopen($name, "r") or die("Unable to open file!");
-        //   echo fread($name);
-        //   fclose($name);
-        
         }
     }
 
@@ -251,7 +250,7 @@ class MainController extends Controller
         $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
         if ($query_string != "") {
             $searchParams = [
-                'index' => 'metadata',
+                'index' => 'metadata2',
                 'from' => 0,
                 'size' => 501,
                 'type' => '_doc',
@@ -277,7 +276,7 @@ class MainController extends Controller
       
           if ($query_string != "") {
             $params = [
-                'index' => 'metadata',
+                'index' => 'metadata2',
                 'from' => 0,
                 'size' => 501,
                 'type' => '_doc',
@@ -303,7 +302,7 @@ class MainController extends Controller
       
           if ($query_string != "") {
             $params = [
-                'index' => 'metadata',
+                'index' => 'metadata2',
                 'from' => 0,
                 'size' => 501,
                 'type' => '_doc',
@@ -345,7 +344,7 @@ class MainController extends Controller
         $advisor               = $request->input('advisor');
 
         $params = [
-            'index' => 'metadata',
+            'index' => 'metadata2',
             'type' => '_doc',
             'body'  => [
                     'etd_file_id'=>$etd_file_id,
@@ -372,27 +371,77 @@ class MainController extends Controller
         </div>';
     }
 
-    // public function upload_file(Request $request)
-    // {
-    //     $targetfolder = "/Users/pavani/web/storage/PDF";
+    public function getTokenapi()
+    {
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
+            $user = Auth::user();
+            if ($user->getRememberToken() == null) {
+                $token = Str::random(32);
+                $user->setRememberToken($token);
+                $user->save();
+            }
+            return response()->json(['success' => $user->getRememberToken()], 200);
+        }
+        else{
+            return response()->json(['error'=>'Unauthorised'], 401);
+        }
+    }
 
-    //     $targetfolder = $targetfolder . basename( $_FILES['file']['name']) ;
+    public function dosearchapi()
+    {
+      $terms = request('query');
+      $limit = request('n');
+      $key = request('key');
+      $client =  ClientBuilder::create()->build();
+      $users = Auth::user();
+      $resultids = (array)DB::select('select remember_token from users');
+      $resultstr = json_encode($resultids);
 
-    //     if(move_uploaded_file($_FILES['file']['tmp_name'], $targetfolder))
+      if ($key != NULL && str_contains($resultstr, $key)) {
 
-    //     {
+                  $searchParams = [
+                    'index' => 'metadata2',
+                    'from' => 0,
+                    'size' => $limit,
+                    'type' => '_doc',
+                    'body' => [
+                        'query' => [
+                            'multi_match' => [
+                                'query' => $terms,
+                                'fields' => ['author','title','$etd_file_id','$year','university','degree','program','abstract','advisor'],
+    
+                                ]
+                            ]
+                        ]
+                    ];
 
-    //         echo "The file ". basename( $_FILES['file']['name']). " is uploaded";
+          $results = $client->search($searchParams);
+          $count = $results['hits']['total']['value'];
+          $res = $results['hits']['hits'];
+          $rank = 1;
+    
+         foreach( $res as $r)
+          {       
+            if($rank<=$limit)
+            {
+                $title[$rank]['title'] = $results['hits']['hits'][$rank-1]['_source']['title'];
+                $author[$rank]['author'] = $results['hits']['hits'][$rank-1]['_source']['author'];
+                $etd[$rank]['etd_file_id'] = $results['hits']['hits'][$rank-1]['_source']['etd_file_id'];
+                $year[$rank]['year'] = $results['hits']['hits'][$rank-1]['_source']['year'];
+                $university[$rank]['university'] = $results['hits']['hits'][$rank-1]['_source']['university'];
+                $degree[$rank]['degree'] = $results['hits']['hits'][$rank-1]['_source']['degree'];
+                //$abstract[$rank]['abstract'] = $results['hits']['hits'][$rank-1]['_source']['abstract'];
+                $advisor[$rank]['advisor'] = $results['hits']['hits'][$rank-1]['_source']['advisor'];
+                $program[$rank]['program'] = $results['hits']['hits'][$rank-1]['_source']['program'];
+                $rank+=1;
+            }
+          }
+          return response()->json(['response'=>$title,$author,$advisor,$etd,$year,$university,$degree,$program], 200);
+        }else {
+          return response()->json(['error' => 'UnAuthorised Access'], 401);
+      }
+  }
 
-    //     }
-
-    //     else {
-
-    //         echo "Problem uploading file";
-
-    //     }
-
-    // }
 }
 
 

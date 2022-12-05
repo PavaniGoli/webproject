@@ -64,19 +64,16 @@ color: black;
     display: block;
     padding: 8px;
   }
+ 
  </style>
  </head>
  <body>
 
  <ul>
   <li><a href="\update"><b>Profile</b></a></li>
-   @if(Auth::user()->is_verified !=0)
-   <!--<div class="alert alert-danger success-block">-->
-     
-    
-  <li><a href="{{ url('/main/logout') }}"><b>Logout</b></a></li>
-  
-   @else
+   @if(Auth::user()->is_verified !=0) 
+    <li><a href="{{ url('/main/logout') }}"><b>Logout</b></a></li>
+  @else
     <script>window.location = "/main";</script>
   @endif
   <button onclick="history.back()"  class="btn btn-primary"><b>Go Back</b></button>
@@ -123,13 +120,12 @@ color: black;
      <input type="text" name="advisor" class="form-control" />
      </div>
      <br>
-      <div class="form-group">
+     <div class="form-group">
      <label>Year</label>
      <input type="text" name="year" class="form-control" />
      </div> 
      <input type = "submit"name="Submit" class="btn btn-primary" value="Submit" style="font-weight:bold" />
     </form>
-
 
     <div class="container mt-5">
         <form action="{{route('fileUpload')}}" method="post" enctype="multipart/form-data">
@@ -158,7 +154,6 @@ color: black;
             </button>
         </form>
     </div>
-
-
-
-</body>
+    <br><br>
+    @include('footer')
+  </body>

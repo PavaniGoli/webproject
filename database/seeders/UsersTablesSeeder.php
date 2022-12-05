@@ -21,7 +21,7 @@ class UsersTablesSeeder extends Seeder
             'name'              => 'Pavani',
             'email'             => 'g.siripavani@gmail.com',
             'password'          =>  Hash::make('password'),
-            'remember_token'    =>  Str::random(10),
+            'remember_token'    =>  Str::random(32),
             'verification_code' =>  Str::random(10),
             // // 'is_verified'       =>  
             

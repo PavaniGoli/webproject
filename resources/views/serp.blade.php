@@ -104,12 +104,18 @@ color: black;
     background-color: white;
     border: 1px solid transparent;
     border-radius: 2px;
+    margin: 0 auto;
     .ellipsis {
     max-width: 40px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    
     }
+  }
+
+  .containerbox{
+    margin: 0 auto;
   }
 
 </style>
@@ -126,7 +132,7 @@ color: black;
 
   
  
-  <div class="container box">
+  <div class="containerbox">
    <h3 align="center" class= heading >Search</h3><br/>
    @if ($message = Session::get('error'))
    <div class="alert alert-danger alert-block">
@@ -152,30 +158,16 @@ color: black;
     </div>
    @endif
 </div>
-</br>
 
-<div class="container box">
-<form action="/searchword" method="POST" role="search" name="searchform">
-    {{ csrf_field() }}
-    <div class="input-group" style="margin:20px;">
-        <input type="text" class="form-control" name="q" value="<?php echo $query_string?>"
-            placeholder="Search"> <span class="input-group-btn">
-            <div class="form-group" style="margin-left:20px;">
-                <input type="submit" name="Submit" class="btn btn-primary" value="Submit" style="font-weight:bold" /> 
-                </form> 
-                </div> 
-    </div>
-</form>
-</div>
 </br>
-<div class="container box">
+<div class="containerbox">
 <?php
   require '/Users/pavani/web/vendor/autoload.php';
-  $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
+  $q = trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($query_string))))));
   $client = Elastic\Elasticsearch\ClientBuilder::create()->build();
   $word = strip_tags($_POST['q']);
   $params = [
-      'index' => 'metadata',
+      'index' => 'metadata2',
       'from' => 0,
       'size' => 501,
       'type' => '_doc',
@@ -189,6 +181,23 @@ color: black;
               ]
           ]
       ];
+?>
+
+<div class="containerbox">
+<form action="/searchword" method="POST" role="search" name="searchform">
+    {{ csrf_field() }}
+    <div class="input-group" style="margin:20px;">
+        <input type="text" class="form-control" name="q" value="<?php echo $q?>"
+            placeholder="Search"> <span class="input-group-btn">
+            <div class="form-group" style="margin-left:20px;">
+                <input type="submit" name="Submit" class="btn btn-primary" value="Submit" style="font-weight:bold" /> 
+                </form> 
+                </div> 
+    </div>
+</form>
+</div>
+
+<?php
 
   $response = $client->search($params);
   $total = $response['hits']['total']['value'];
@@ -201,7 +210,7 @@ color: black;
     $score = $response['hits']['hits'][0]['_score'];
     echo
     "<div>
-    <h3><b><i>$total search results for $word</b></i><h3>
+    <h3><b><i>$total search results for $q</b></i><h3>
     </div>";
     echo 
     '<table class="table table-stripped" id="dt1">
@@ -229,11 +238,6 @@ color: black;
     foreach($dir as $file){
     $fname=$path.$file;
     }
-  
-    // if(mime_content_type($fname)=='application/pdf')
-    // {
-    //     $name="/Users/pavani/web/PDF/".$pdf."/".$file;
-    // }
     $abs = strip_tags($abstract);
       if (strlen($abs) > 500) {
       $stringCut = substr($abs, 0, 500);
@@ -262,10 +266,11 @@ color: black;
       </td>";
   
       echo"</tr>";
-  }
+    }
       echo "</tbody></table>";
-}
-    ?>
+  }
+?>
+
     </div>
 
 <script src="https://cdn.jsdelivr.net/mark.js/7.0.0/jquery.mark.min.js"></script>
@@ -273,14 +278,18 @@ color: black;
 $(document).ready( function () {
   var table = $('#dt1').DataTable( {
     "initComplete": function( settings, json ) {
-    $("body").unmark().mark("{{$query_string}}"); 
+    $("body").unmark().mark("{{$q}}"); 
     }
   });
   table.on( 'draw.dt', function () {
-    $("body").unmark().mark("{{$query_string}}");
+    $("body").unmark().mark("{{$q}}");
   }); 
 } );
 $("#searchform").submit(function(e) {
     e.preventDefault();
 });
 </script>
+<br>
+@include('footer')
+</body>
+</html>

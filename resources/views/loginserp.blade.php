@@ -13,121 +13,131 @@
   <link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap" rel="stylesheet">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style type="text/css">
+
 mark{
 background: yellow;
 color: black;
 }
+
 .box{
     width:1200px;
     margin-top:10%;
-    
-   }
+}
+
 .btn-primary {
     color: black;
     background-color: #e8e6e6;
     border-color: #999;
 }
+
 .btn-link {
     color: black;
     background-color: #e8e6e6;
     border-color: #999;
 }
-   body {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color:black;
-    background-color: white;
-    }
-    .head{
-    font-family: 'Akaya Telivigala', cursive;
-    font-size:50px;
-    text-align:center;
-    }
-    .heading{
-    font-family: 'Akaya Telivigala', cursive;
-    font-size:100px;
-    text-align:center;
-    }
-    ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #dddddd;
-  }
-  li {
-    float: right;
-  }
-  li a {
-    color: black;
-    display: block;
-    padding: 8px;
-  }
-    .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
-      color: black;
-    }
-    .dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 5px;
-    background-color: #e8e6e6;
-    color: black;
-    margin-left: 3px;
+
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color:black;
+  background-color: white;
 }
+
+.head{
+  font-family: 'Akaya Telivigala', cursive;
+  font-size:50px;
+  text-align:center;
+}
+
+.heading{
+  font-family: 'Akaya Telivigala', cursive;
+  font-size:100px;
+  text-align:center;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #dddddd;
+}
+
+li {
+  float: right;
+}
+
+li a {
+  color: black;
+  display: block;
+  padding: 8px;
+}
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+  color: black;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 5px;
+  background-color: #e8e6e6;
+  color: black;
+  margin-left: 3px;
+}
+
 .dataTables_wrapper .dataTables_length select {
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 5px;
-    background-color: white;
-    color: black;
-    padding: 4px;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 5px;
+  background-color: white;
+  color: black;
+  padding: 4px;
 }
-    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
-    padding: 8px;
-    line-height: 1.42857143;
-    vertical-align: top;
-    border-top: 1px solid #ddd;
-    background-color: white;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-    box-sizing: border-box;
-    display: inline-block;
-    min-width: 1.5em;
-    padding: 0.5em 1em;
-    margin-left: 2px;
-    text-align: center;
-    text-decoration: none !important;
-    cursor: pointer;
-    cursor: hand;
-    color: white;
-    background-color: white;
-    border: 1px solid transparent;
-    border-radius: 2px;
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+  background-color: white;
 }
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0.5em 1em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  cursor: hand;
+  color: white;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+
+.containerbox{
+    margin: 0 auto;
+}
+
 </style>
 </head>
- <body>
-
- <ul>
+<body>
+<ul>
   <li><a href="\insert"><b>Insert Entry</b></a></li>
   <li><a href="\update"><b>Profile</b></a></li>
    @if(Auth::user()->is_verified !=0)
-   <!--<div class="alert alert-danger success-block">-->
-     
-    
-  <li><a href="{{ url('/main/logout') }}"><b>Logout</b></a></li>
-  
+    <li><a href="{{ url('/main/logout') }}"><b>Logout</b></a></li>
    @else
     <script>window.location = "/main";</script>
-  @endif
-
-  <a href="\index" float="left" class="btn btn-primary"><b>Go back home</b></a>
-  </ul>
-
-  
- 
-  <div class="container box">
+   @endif
+   <a href="\index" float="left" class="btn btn-primary"><b>Go back home</b></a>
+   </ul>
+   <div class="containerbox">
    <h3 align="center" class= heading >Search</h3><br/>
    @if ($message = Session::get('error'))
    <div class="alert alert-danger alert-block">
@@ -155,24 +165,11 @@ color: black;
 </div>
 </br>
 
-<div class="container box">
-<form action="/loginserp" method="POST" role="search" name="searchform">
-    {{ csrf_field() }}
-    <div class="input-group" style="margin:20px;">
-        <input type="text" class="form-control" name="q" value="<?php echo $query_string?>"
-            placeholder="Search"> <span class="input-group-btn">
-            <div class="form-group" style="margin-left:20px;">
-                <input type="submit" name="Submit" class="btn btn-primary" value="Submit" style="font-weight:bold" /> 
-                </form> 
-                </div> 
-    </div>
-</form>
-</div>
 </br>
-<div class="container box">
+<div class="containerbox">
 <?php
   require '/Users/pavani/web/vendor/autoload.php';
-  $q = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $query_string);
+  $q = trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($query_string))))));
   $client = Elastic\Elasticsearch\ClientBuilder::create()->build();
   $word = strip_tags($_POST['q']);
   $params = [
@@ -190,6 +187,21 @@ color: black;
               ]
           ]
       ];
+    ?>
+      <div class="containerbox">
+      <form action="/loginserp" method="POST" role="search" name="searchform">
+          {{ csrf_field() }}
+          <div class="input-group" style="margin:20px;">
+              <input type="text" class="form-control" name="q" value="<?php echo $q?>"
+                  placeholder="Search"> <span class="input-group-btn">
+                  <div class="form-group" style="margin-left:20px;">
+                      <input type="submit" name="Submit" class="btn btn-primary" value="Submit" style="font-weight:bold" /> 
+                      </form> 
+                      </div> 
+          </div>
+      </form>
+      </div>
+  <?php
 
   $response = $client->search($params);
   $total = $response['hits']['total']['value'];
@@ -202,7 +214,7 @@ color: black;
     $score = $response['hits']['hits'][0]['_score'];
     echo
     "<div>
-    <h3><b><i>$total search results for $word</b></i><h3>
+    <h3><b><i>$total search results for $q</b></i><h3>
     </div>";
     echo 
     '<table class="table table-stripped" id="dt1">
@@ -224,12 +236,6 @@ color: black;
       $pdf = (isset($source['_source']['pdf']) ? $source['_source']['pdf'] : ""); 
       $wiki_terms = (isset($source['_source']['wiki_terms']) ? $source['_source']['wiki_terms'] : ""); 
       $url = asset('storage/PDF/'.$pdf.'');
-
-    // $path = "/Users/pavani/web/storage/app/public/PDF/";
-    // $dir =scandir($path);
-    // foreach($dir as $file){
-    // $fname=$path.$file;
-    // }
 
     $abs = strip_tags($abstract);
       if (strlen($abs) > 500) {
@@ -270,14 +276,16 @@ color: black;
 $(document).ready( function () {
   var table = $('#dt1').DataTable( {
     "initComplete": function( settings, json ) {
-    $("body").unmark().mark("{{$query_string}}"); 
+    $("body").unmark().mark("{{$q}}"); 
     }
   });
   table.on( 'draw.dt', function () {
-    $("body").unmark().mark("{{$query_string}}");
+    $("body").unmark().mark("{{$q}}");
   }); 
 } );
 $("#searchform").submit(function(e) {
     e.preventDefault();
 });
 </script>
+<br>
+@include('footer')

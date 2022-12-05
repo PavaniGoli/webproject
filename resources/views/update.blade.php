@@ -11,9 +11,22 @@
     margin:0 auto;
     border:1px solid #ccc;
    }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #dddddd;
+  }
+
   </style>
  </head>
  <body>
+ <ul>
+  <a href="\index" class="btn btn-primary">Go back home</a>
+   </form>
+</ul>
  <br/>
  <div class="container box">
    <h3 align="center">Update Details</h3><br/>
@@ -44,7 +57,6 @@
  </div>
   </br>
   </br>
-
   <div class="container box">
    <h3 align="center">Update Password</h3><br/>
   <form method="post" action="{{ url('/main/updatepassword') }}">
@@ -62,9 +74,9 @@
      <input type="submit" name="update" class="btn btn-primary" value="Update Password" />
     </div>
    </form>
-   <a href="\index" class="btn btn-primary">Go back home</a>
     </div>
   </div>
-
+  <br><br>
+  @include('footer')
  </body>
 </html>

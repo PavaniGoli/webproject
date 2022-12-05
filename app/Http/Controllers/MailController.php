@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use app\Rules\ReCaptcha;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerificationEmail;
 use App\Mail\ForgotPassword;
@@ -9,7 +10,6 @@ use Illuminate\Support\Str;
 
 class MailController extends Controller
 {
-
     public static function sendForgotPassword($name,$email,$verification_code)
     {
         $data =[

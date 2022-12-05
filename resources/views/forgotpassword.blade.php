@@ -11,11 +11,14 @@
     margin:0 auto;
     border:1px solid #ccc;
    }
+   .containerbox{
+    margin: 0 auto;
+  }
   </style>
  </head>
  <body>
   <br />
-  <div class="container box">
+  <div class="containerbox">
    <h3 align="center">Reset Password</h3><br/>
 
    @if(isset(Auth::user()->email))
@@ -57,5 +60,6 @@
     </div>
    </form>
    <a class="btn btn-primary" href="\main">Go back home</a>
+   @include('footer')
  </body>
 </html>

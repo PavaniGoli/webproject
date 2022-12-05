@@ -11,6 +11,7 @@
     margin:0 auto;
     border:1px solid #ccc;
    }
+  
   </style>
  </head>
  <body>
@@ -64,5 +65,10 @@
    <a href="\main" class="btn btn-primary">Go back home</a>
    </form>
   </div>
+  <br>
+  <br>
+  <br>
+  <br><br>
+  @include('footer')
  </body>
 </html>

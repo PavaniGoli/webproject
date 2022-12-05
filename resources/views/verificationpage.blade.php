@@ -11,16 +11,23 @@
     margin:0 auto;
     border:1px solid #ccc;
    }
+   ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #dddddd;
+  }
   </style>
  </head>
  <body>
+ <ul>
+  <a href="\main" class="btn btn-primary">Go back home</a>
+   </form>
+</ul>
   <br />
   <div class="container box">
    <h3 align="center">Login here</h3><br/>
-
-   <!--@if(isset(Auth::user()->verification_code))
-    <script>window.location="/index";</script>
-   @endif-->
 
    @if ($message = Session::get('error'))
    <div class="alert alert-danger alert-block">
@@ -57,5 +64,7 @@
     </div>
    </form>
 </div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+@include('footer')
  </body>
 </html>

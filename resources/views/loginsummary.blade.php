@@ -111,7 +111,9 @@ color: black;
     white-space: nowrap;
     }
   }
-
+  .containerbox{
+    margin: 0 auto;
+  }
 </style>
 </head>
  <body>
@@ -131,7 +133,7 @@ color: black;
   <button onclick="history.back()"  class="btn btn-primary"><b>Go Back</b></button>
   </ul>
 
-<div class="container box">
+<div class="containerbox">
 @if(session()->has('message'))
     <div class="alert alert-success">
         {{ session()->get('message') }}
@@ -207,3 +209,4 @@ color: black;
       </td>";
     }
       ?>
+      @include('footer')
