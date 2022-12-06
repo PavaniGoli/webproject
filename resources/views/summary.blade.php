@@ -204,10 +204,10 @@
     ];
 
     function highlightWords($text,$word,$u) {
-      $text = preg_replace('#'. preg_quote($word) .'#i', '<div class="sample"> <span style="background-color: #F9F902;">\\0</span> 
-      <span class="tooltipt"><a href='.$u.'>'.$u.'</a></span>
-    </div> ', $text);
-      return $text;
+        $text = preg_replace('#'. preg_quote($word) .'#i', '<div class="sample"> <span style="background-color: #F9F902;">\\0</span> 
+        <span class="tooltipt"><a href='.$u.'>'.$u.'</a></span>
+      </div> ', $text);
+        return $text;
   }
 
     $response = $client->search($query);
@@ -228,8 +228,8 @@
         $url = asset('storage/PDF/'.$pdf.'');
         ?>
 
-        <div class="sample">Here is your tooltip
-        <span class="tooltipt">Tooltip text</span>
+        <div class="sample">
+        <span class="tooltipt"></span>
       </div>
 
        <?php
@@ -267,23 +267,21 @@
     
     $arr1 = json_decode($wiki_terms, true);
     $terms_arr = array();
+    if($arr1!=null){
     foreach ($arr1 as $item)
     {
       $terms_arr[]= $item['term'];
       $url_arr[]=$item['url'];
     }
-    var_dump($url_arr);
     $c = count ($terms_arr);
     for( $i = 0; $i < $c; $i++)
     {
       $abstract= highlightWords($abstract, $terms_arr[$i],$url_arr[$i]);
     }
+
     
-    echo "<b>Abstract :</b> ".$abstract." 
-    <br>
-    <br>
-    <b>Wiki-Terms :</b> ".$wiki_terms."
-    ";
+  }
+    echo "<b>Abstract :</b> ".$abstract."";
   }
 
   ?>

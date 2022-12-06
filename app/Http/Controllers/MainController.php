@@ -424,19 +424,19 @@ class MainController extends Controller
           {       
             if($rank<=$limit)
             {
-                $title[$rank]['title'] = $results['hits']['hits'][$rank-1]['_source']['title'];
-                $author[$rank]['author'] = $results['hits']['hits'][$rank-1]['_source']['author'];
-                $etd[$rank]['etd_file_id'] = $results['hits']['hits'][$rank-1]['_source']['etd_file_id'];
-                $year[$rank]['year'] = $results['hits']['hits'][$rank-1]['_source']['year'];
-                $university[$rank]['university'] = $results['hits']['hits'][$rank-1]['_source']['university'];
-                $degree[$rank]['degree'] = $results['hits']['hits'][$rank-1]['_source']['degree'];
-                //$abstract[$rank]['abstract'] = $results['hits']['hits'][$rank-1]['_source']['abstract'];
-                $advisor[$rank]['advisor'] = $results['hits']['hits'][$rank-1]['_source']['advisor'];
-                $program[$rank]['program'] = $results['hits']['hits'][$rank-1]['_source']['program'];
+                $json_response[$rank]['title'] = $results['hits']['hits'][$rank-1]['_source']['title'];
+                $json_response[$rank]['author'] = $results['hits']['hits'][$rank-1]['_source']['author'];
+                $json_response[$rank]['etd_file_id'] = $results['hits']['hits'][$rank-1]['_source']['etd_file_id'];
+                $json_response[$rank]['year'] = $results['hits']['hits'][$rank-1]['_source']['year'];
+                $json_response[$rank]['university'] = $results['hits']['hits'][$rank-1]['_source']['university'];
+                $json_response[$rank]['degree'] = $results['hits']['hits'][$rank-1]['_source']['degree'];
+                $json_response[$rank]['abstract'] = $results['hits']['hits'][$rank-1]['_source']['abstract'];
+                //$json_response[$rank]['advisor'] = $results['hits']['hits'][$rank-1]['_source']['advisor'];
+                $json_response[$rank]['program'] = $results['hits']['hits'][$rank-1]['_source']['program'];
                 $rank+=1;
             }
           }
-          return response()->json(['response'=>$title,$author,$advisor,$etd,$year,$university,$degree,$program], 200);
+          return response()->json(['response'=>$json_response], 200);
         }else {
           return response()->json(['error' => 'UnAuthorised Access'], 401);
       }

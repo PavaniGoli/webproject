@@ -114,6 +114,45 @@ color: black;
   .containerbox{
     margin: 0 auto;
   }
+
+  .sample{
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    }
+
+    .sample .tooltipt {
+    visibility: hidden;
+    width: relative;
+    background-color: BLACK; 
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 98%;
+    left:1px;
+    margin-left: -60px;
+    
+    transition: opacity 0.3s;
+    }
+
+    .sample .tooltipt::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+    }
+
+    .sample:hover .tooltipt {
+    visibility: visible;
+    opacity: 3;
+    }
+
 </style>
 </head>
  <body>
@@ -158,6 +197,13 @@ color: black;
         ]
     ];
 
+    function highlightWords($text,$word,$u) {
+      $text = preg_replace('#'. preg_quote($word) .'#i', '<div class="sample"> <span style="background-color: #F9F902;">\\0</span> 
+      <span class="tooltipt"><a href='.$u.'>'.$u.'</a></span>
+    </div> ', $text);
+      return $text;
+}
+
     $response = $client->search($query);
     foreach( $response['hits']['hits'] as $source){
         $etd_file_id = (isset($source['_source']['etd_file_id'])? $source['_source']['etd_file_id'] : "");
@@ -172,7 +218,13 @@ color: black;
         $pdf = (isset($source['_source']['pdf']) ? $source['_source']['pdf'] : ""); 
         $wiki_terms = (isset($source['_source']['wiki_terms']) ? $source['_source']['wiki_terms'] : "");
         $url = asset('storage/PDF/'.$pdf.'');
-  
+        ?>
+
+        <div class="sample">
+        <span class="tooltipt">Tooltip text</span>
+      </div>
+
+      <?php
       echo "<tr>
       <td><h3>".$title."</h3>
       <br>
@@ -200,13 +252,29 @@ color: black;
       <b>Year :</b>  ".$year."
       <br>
       <br>
-      <b>Abstract :</b>  ".$abstract."
-      <br> 
-      <br>
       <b>Advisor :</b>  ".$advisor."
       <br> 
       <br>
       </td>";
+
+    $arr1 = json_decode($wiki_terms, true);
+    $terms_arr = array();
+    if($arr1!=null){
+    foreach ($arr1 as $item)
+    {
+      $terms_arr[]= $item['term'];
+      $url_arr[]=$item['url'];
     }
-      ?>
-      @include('footer')
+    $c = count ($terms_arr);
+    for( $i = 0; $i < $c; $i++)
+    {
+      $abstract= highlightWords($abstract, $terms_arr[$i],$url_arr[$i]);
+    }
+  }
+    echo "<b>Abstract :</b> ".$abstract." 
+    <br>
+    <br>
+    ";
+  }
+  ?>
+  @include('footer')
